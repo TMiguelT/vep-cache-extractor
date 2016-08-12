@@ -13,15 +13,15 @@ use IO::Uncompress::Gunzip qw(gunzip) ;
 
 # The first argument is a directory path
 my $directory = $ARGV[0];
-die "Not a dir\n" unless -d $directory;
+die("Not a dir\n") unless -d $directory;
 
 # Remaining arguments are fields to extract
-die "Need to extract at least one field!\n" unless scalar @ARGV > 1;
+die("Need to extract at least one field!\n") unless scalar @ARGV > 1;
 my @column_names = ();
 my @paths = ();
 foreach my $input(@ARGV[1 .. $#ARGV]){
   my @split = split(/:/, $input);
-  die "Each field must consist of a path separated by a field name with a colon (:)\n" unless scalar @split == 2;
+  die("Each field must consist of a path separated by a field name with a colon (:)\n") unless scalar @split == 2;
   push(@column_names, $split[1]);
   push(@paths, $split[0]);
 }
@@ -32,8 +32,6 @@ my $csv = Text::CSV->new({
 });
 # All lines of the CSV
 my @lines = ();
-# Store unzipped files here
-# my ($temp_fh, $temp_filename) = tempfile();
 
 # Iterate over each file recursively
 find(\&process, $directory);
@@ -52,7 +50,7 @@ sub process {
   # Unzip the file to a buffer, and pretend it's a file in order to use retrieve
   my $buffer;
   gunzip($zip_file, \$buffer);
-  open my $fake_fh, "<", \$buffer;
+  open(my $fake_fh, "<", \$buffer);
 
   # Each file consists of a hash with only one key (%root).
   # This key corresponds to the chromosome (e.g. '3', 'X' etc.)
