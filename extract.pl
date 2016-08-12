@@ -4,21 +4,18 @@ use strict;
 use File::Find;
 use Text::CSV;
 use JSON;
-use Storable qw(retrieve thaw fd_retrieve);
+use Storable qw(fd_retrieve);
 use List::MoreUtils qw(uniq);
 use Data::Clean::JSON qw(clean_json_in_place clone_and_clean_json);
 use Data::Structure::Util qw(unbless);
 use Data::Diver qw(Dive);
-use IO::Uncompress::Gunzip qw(gunzip $GunzipError) ;
-use Compress::Zlib qw(memGunzip);
-use File::Slurp;
+use IO::Uncompress::Gunzip qw(gunzip) ;
 
 # The first argument is a directory path
 my $directory = $ARGV[0];
 die "Not a dir\n" unless -d $directory;
 
 # Remaining arguments are fields to extract
-# print STDERR scalar @ARGV[1 .. $#ARGV];
 die "Need to extract at least one field!\n" unless scalar @ARGV > 1;
 my @column_names = ();
 my @paths = ();
@@ -45,31 +42,23 @@ find(\&process, $directory);
 @lines = uniq(@lines);
 $csv->combine(@column_names);
 unshift(@lines, $csv->string());
-print(join("\n", @lines));
+print(join("\n", @lines)."\n");
 
 sub process {
   my $zip_file = $_;
   # Ensure file is not a directory and it's just a pure .gz file (not .txt), and it isn't a reg or var file
-  return if ($zip_file !~ /\.gz$/) || (-d $zip_file) || ($zip_file =~ /reg\.gz|var\.gz/);
+  return if ((-d $zip_file) || ($zip_file =~ /reg\.gz|var\.gz/) || $zip_file !~ /\.gz$/);
+
+  # Unzip the file to a buffer, and pretend it's a file in order to use retrieve
+  my $buffer;
+  gunzip($zip_file, \$buffer);
+  open my $fake_fh, "<", \$buffer;
 
   # Each file consists of a hash with only one key (%root).
   # This key corresponds to the chromosome (e.g. '3', 'X' etc.)
   # Presumably this is because cache was one large hash that has been divided into multiple files
   # The value of each hash entry is an array of genes (@genes)
-  my $file;
-  # print "SUCCEEDED!" . $zip_file;
-  # my $input = read_file($zip_file);
-  # # print $input; exit;
-  # my $output = memGunzip($input);
-  # print $output; exit;
-  # my $gz = gzopen($zip_file, "rb");
-  gunzip($zip_file, \$file);
-  # print ($file); exit;
-
-  # Compress::Zlib::memGunzip($buffer)
-  # gunzip($zip_file => \$file);
-  # print $file; exit 0;
-  my %root = %{thaw($file)};#%{thaw($file)};
+  my %root = %{fd_retrieve($fake_fh)};
   my $key = (keys %root)[0]; #Take the first key since it's the only one in this file
   my @transcripts = @{$root{$key}};
 
@@ -83,7 +72,6 @@ sub process {
       clean_json_in_place($value);
       push(@columns, JSON::to_json($value, {allow_nonref => 1}));
     }
-    # print STDERR scalar @paths;
     $csv->combine(@columns);
     push(@lines, $csv->string());
   }
