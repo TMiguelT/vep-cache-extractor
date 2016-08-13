@@ -46,8 +46,8 @@ want to extract from the cache and what to name them. Each argument is a pair of
 path:column_name pairs. For example, this second argument might be `_trans_exon_array.0.stable_id:exon_id` (explained below)
 
 * `path`: A dot separated string, where each segment is a hash key, indicating
-which field to choose. For example, "_trans_exon_array.0.stable_id" would choose the stable_id of the first exon
-in the transcript, which in json terms means extract transcript["_trans_exon_array"][0][stable_id] for each transcript.
+which field to choose. For example, `"_trans_exon_array.0.stable_id"` would choose the stable_id of the first exon
+in the transcript, which in json terms means extract `transcript["_trans_exon_array"][0][stable_id]` for each transcript.
 You might find it helpful to look at the sample.json file in the repository, as this will give you some indication as to which fields are stored in the VEP cache.
 * `column_name`: A string indicating the name of the column to store this data in.
 For example, if we used the path above, along with the column_name of "exon_id",
