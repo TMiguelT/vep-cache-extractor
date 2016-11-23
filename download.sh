@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 ARGS=$(getopt -o e:c:g: --long "ensembl-release:,cache-type:l,usage,help,genome-build" -n $(basename $0) -- "$@")
 eval set -- "$ARGS"
 
