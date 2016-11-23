@@ -6,6 +6,9 @@ tool. The cache itself is a large collection of Perl storable files, each
 containing a large list of transcript entries.
 
 ## Installation
+
+Firstly, the script requires a modern version of Perl 5 to run. However you probably have such a version if you are running VEP, so this is likely not an issue
+
 To install the script's dependencies, make sure cpanm is installed with
 ```bash
 cpan App::cpanminus
@@ -15,8 +18,9 @@ and then install the dependencies using
 cpanm --installdeps .
 ```
 
-You'll also need a copy of the VEP cache itself. You may already have one if
-you're already using VEP, but you'll still need to unzip all the files  but if not, use the installer script to download it
+You'll also need a copy of the VEP cache itself. You may already have one if you're already using VEP. In this case,
+simply use the directory of the cache as the first argument to the extract script. If not, you can use the downloader script to obtain it,
+and use `vep_cache` (a relative path) as the cache path.
 (documented below).
 
 ## Downloader Script
@@ -36,7 +40,7 @@ Usage: download.sh -c cache_type -e ensembl_release -g genome-build
 ## Usage
 Use the script as follows:
 ```bash
-perl extract.pl /path/to/cache path_1:column_1 path_2:column_2
+./extract.pl /path/to/cache path_1:column_1 path_2:column_2
 ```
 In other words, the script's first argument is a directory path indicating where
 the cache is located.
