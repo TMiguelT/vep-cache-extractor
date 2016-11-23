@@ -1,3 +1,4 @@
+#!/usr/bin/env perl
 # Imports
 use warnings;
 use strict;
