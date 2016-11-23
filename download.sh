@@ -65,10 +65,8 @@ else
     URL=ftp://ftp.ensembl.org/pub/release-${ENSEMBL_RELEASE}/variation/VEP/${CACHE_TYPE}_${ENSEMBL_RELEASE}_GRCh${GENOME_BUILD}.tar.gz 
 fi
 
-echo $URL
-
 # Do the download
-#curl $URL | tar -xz -C $(dirname $0)/vep_cache
+curl $URL | tar -xz -C $(dirname $0)/vep_cache
 echo "Done."
 
 # Unzip internal files
