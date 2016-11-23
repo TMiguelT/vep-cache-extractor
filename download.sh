@@ -48,15 +48,30 @@ while true ; do
     esac
 done
 
-# Download and unzip to the current directory
-echo -n "Downloading VEP cache..."
-mkdir -p $(dirname $0)/vep_cache
-curl ftp://ftp.ensembl.org/pub/release-${ENSEMBL_RELEASE}/variation/VEP/${CACHE_TYPE}_${ENSEMBL_RELEASE}_GRCh${GENOME_BUILD}.tar.gz | tar -xz -C $(dirname $0)/vep_cache
-echo "Done."
+# Ensure all arguments have been given
+if [[ -z $ENSEMBL_RELEASE ]] || [[ -z $CACHE_TYPE ]] || [ -z $GENOME_BUILD ] ; then
+    usage
+    exit 1
+fi
 
-# Enable extended globbing
-shopt -s extglob
+echo -n "Downloading VEP cache..."
+
+# Make the parent directory
+mkdir -p $(dirname $0)/vep_cache
+# Choose the URL based on the ENSEMBL release
+if [[ $(( $ENSEMBL_RELEASE <= 75 )) == 1 ]] ; then
+    URL=ftp://ftp.ensembl.org/pub/release-${ENSEMBL_RELEASE}/variation/VEP/${CACHE_TYPE}_${ENSEMBL_RELEASE}.tar.gz
+else
+    URL=ftp://ftp.ensembl.org/pub/release-${ENSEMBL_RELEASE}/variation/VEP/${CACHE_TYPE}_${ENSEMBL_RELEASE}_GRCh${GENOME_BUILD}.tar.gz 
+fi
+
+echo $URL
+
+# Do the download
+curl $URL | tar -xz -C $(dirname $0)/vep_cache
+echo "Done."
 
 # Unzip internal files
 echo -n "Unzipping files..."
-gunzip vep_cache/**.gz
+bash -O extglob  -c 'gunzip vep_cache/**.gz'
+
