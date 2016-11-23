@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
 
+# Parse arguments using gnu getopt
 ARGS=$(getopt -o e:c:g: --long "ensembl-release:,cache-type:l,usage,help,genome-build" -n $(basename $0) -- "$@")
 eval set -- "$ARGS"
 
+# Define terminal formatting sequences
 bold=$(tput bold)
 normal=$(tput sgr0)
 
+# Usage print function
 function usage {
   echo "${bold}Usage: $(basename $0) -c cache_type -e ensembl_release -g genome-build"
   echo "  ${bold}-c, --cache-type"
@@ -16,6 +19,7 @@ function usage {
   echo "    ${normal}The grch build version to download for. e.g. 37, 38"
 }
 
+# Parse the arguments
 while true ; do
     case "$1" in
         -e|--ensembl-release)
