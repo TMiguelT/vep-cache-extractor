@@ -69,7 +69,3 @@ fi
 curl $URL | tar -xz -C $(dirname $0)/vep_cache
 echo "Done."
 
-# Unzip internal files
-echo -n "Unzipping files..."
-bash -O globstar -c 'gunzip vep_cache/**/*.gz'
-
