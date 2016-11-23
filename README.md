@@ -20,7 +20,7 @@ cpanm --installdeps .
 
 You'll also need a copy of the VEP cache itself. You may already have one if you're already using VEP. In this case,
 simply use the directory of the cache as the first argument to the extract script. If not, you can use the downloader script to obtain it,
-and use `vep_cache` (a relative path) as the cache path.
+and use `vep_cache` (a relative path) as the cache path
 (documented below).
 
 ## Downloader Script
@@ -38,7 +38,7 @@ Usage: download.sh -c cache_type -e ensembl_release -g genome-build
 ```
 
 ## Usage
-Use the script as follows:
+Use the extract script as follows:
 ```bash
 ./extract.pl /path/to/cache path_1:column_1 path_2:column_2
 ```
