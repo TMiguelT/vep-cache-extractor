@@ -18,8 +18,11 @@ and then install the dependencies using
 cpanm --installdeps .
 ```
 If you are using a system version of Perl, running these commands may give you an error message
-along the lines of `Can't write to /usr/local/share/perl/5.22.2 and /usr/local/bin`. Make sure to run these with `sudo`
-if this is the case.
+along these lines: 
+```
+Can't write to /usr/local/share/perl/5.22.2 and /usr/local/bin
+```
+If this is the case, make sure to run these commands with `sudo`
 
 You'll also need a copy of the VEP cache itself. You may already have one if you're already using VEP. In this case,
 simply use the directory of the cache as the first argument to the extract script. If not, you can use the downloader script to obtain it,
