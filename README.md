@@ -33,7 +33,7 @@ and use `vep_cache` (a relative path) as the cache path
 This script downloads a certain version of the VEP cache into the repository
 directory (the same directory as the script). Use it as follows:
 
-```bash
+```
 Usage: download.sh -c cache_type -e ensembl_release -g genome-build
   -c, --cache-type
     The version of the cache to download. Either 'merged', 'ensembl' or 'refseq'
